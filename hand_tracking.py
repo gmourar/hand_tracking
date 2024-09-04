@@ -50,12 +50,24 @@ class Detector:
 if __name__ == '__main__':
     Detec = Detector()
     capture = cv2.VideoCapture(0)
+    previous_time = 0
+    current_time = 0
+
     while True:
         # captura do frame
         _ , img =  capture.read()
 
+
+        current_time = time.time()
+        fps = 1/(current_time - previous_time)
+        previous_time = current_time
+
         # manipulação de frame
+        cv2.putText(img, 'fps: ', (5, 70), cv2.FONT_HERSHEY_PLAIN, 1, (255,0,100) , 1)
+        cv2.putText(img, str(int(fps)), (80, 70), cv2.FONT_HERSHEY_PLAIN, 1, (255,0,100) , 1)
         img = Detec.find_hands(img)
+
+
 
         cv2.imshow('Teste Hand' , img)
         if cv2.waitKey(20) & 0xFF==ord('q'):
